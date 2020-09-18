@@ -8,14 +8,10 @@ coords = {'(1, 3)' : 0,
           '(2, 1)' : 7,
           '(3, 1)' : 8}    
 
+
 def players_char(cells):
-    x = 0
-    o = 0
-    for char in cells:
-        if char == 'X':
-            x += 1
-        if char == 'O':
-            o += 1
+    x = cells.count('X')
+    o = cells.count('O')
     if x == o:
         return 'X'
     if x == o + 1:
@@ -32,30 +28,17 @@ def board(cells):
     print("---------")
 
 def states(cells):
-    if ['O', 'O', 'O'] in [
-                            cells[0:3], # horizontal
-                            cells[3:6], 
-                            cells[6:9], 
-                            [cells[0], cells[3], cells[6]], # vertical
-                            [cells[1], cells[4], cells[7]], 
-                            [cells[2], cells[5], cells[8]],
-                            [cells[0], cells[4], cells[8]], # diagonal
-                            [cells[6], cells[4], cells[2]]
-                          ]:
+    winning_positions = [cells[0:3], cells[3:6], cells[6:9],  # horizontal
+                        cells[0:7:3], cells[1:8:3], cells[2:9:3],  # vertical
+                        cells[0:9:4], cells[2:7:2]]  # diagonal
+
+    if ['O', 'O', 'O'] in winning_positions:
         return "O wins"
-    elif ['X', 'X', 'X'] in [
-                            cells[0:3], # horizontal
-                            cells[3:6], 
-                            cells[6:9], 
-                            [cells[0], cells[3], cells[6]], # vertical
-                            [cells[1], cells[4], cells[7]], 
-                            [cells[2], cells[5], cells[8]], 
-                            [cells[0], cells[4], cells[8]], # diagonal
-                            [cells[6], cells[4], cells[2]]
-                          ]:
+
+    elif ['X', 'X', 'X'] in winning_positions:
         return "X wins"
         
-    if not any([True for char in cells if char == " "]):
+    elif not any([True for char in cells if char == " "]):
         return "Draw"
         
     else:
@@ -88,10 +71,10 @@ def main():
             else:
                 print("Coordinates should be from 1 to 3!")
                 
-    print(cells, coords[coordinates_key])
+    # print(cells, coords[coordinates_key])
     cells[coords[coordinates_key]] = players_char(cells)
     board(cells)
-    print(states(cells))
+    # print(states(cells))
 
 if __name__ == "__main__":
     main()
