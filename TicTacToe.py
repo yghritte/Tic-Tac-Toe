@@ -46,49 +46,98 @@ def states(cells):
         return "Game not finished"
 
 
-def main():
+def user_move(cells):
+    correct_input = False
+    while not correct_input:
+        print("Enter the coordinates: ")
+        coordinates = input().split(" ")
+
+        if len(coordinates) != 2:
+            print("You should enter numbers!")
+
+        elif len(coordinates[0]) != 1 or len(coordinates[1]) != 1:
+            print("You should enter numbers!")
+
+        else:
+            if coordinates[0] in ['1', '2', '3'] and coordinates[1] in ['1', '2', '3']:
+                coordinates_key = "({}, {})".format(*coordinates)
+
+                if cells[coords[coordinates_key]] != " ":
+                    print("This cell is occupied! Choose another one!")
+
+                else:
+                    correct_input = True
+                    cells[coords[coordinates_key]] = players_char(cells)
+                    print_board(cells)
+            else:
+                print("Coordinates should be from 1 to 3!")
+
+
+def AI_easy_move(cells):
+    print('Making move level "easy"')
+    allowed_pos = [i for i in range(9) if cells[i] == " "]
+    random_point = random.choice(allowed_pos)
+    cells[random_point] = players_char(cells)
+    print_board(cells)
+
+
+def AI_medium_move(cells):
+    pass
+
+
+def AI_hard_move(cells):
+    pass
+
+
+def start_game(player1, player2):
     cells = [" "] * 9
     print_board(cells)
-    
+
     while states(cells) == "Game not finished":
-        correct_input = False
+        if player1 == 'user':
+            user_move(cells)
+        
+        else:
+            AI_easy_move(cells)
 
-        while not correct_input:
-            print("Enter the coordinates: ")
-            coordinates = input().split(" ")
-            print(coordinates)
-
-            if len(coordinates) != 2:
-                print("You should enter numbers!")
-
-            elif len(coordinates[0]) != 1 or len(coordinates[1]) != 1:
-                print("You should enter numbers!")
-
-            else:
-                if coordinates[0] in ['1', '2', '3'] and coordinates[1] in ['1', '2', '3']:
-                    coordinates_key = "({}, {})".format(*coordinates)
-
-                    if cells[coords[coordinates_key]] != " ":
-                        print("This cell is occupied! Choose another one!")
-
-                    else:
-                        correct_input = True
-                        cells[coords[coordinates_key]] = players_char(cells)
-                        print_board(cells)
-                else:
-                    print("Coordinates should be from 1 to 3!")
-
+        # checking if the game is over
         if states(cells) != "Game not finished":
             break
+        
+        if player2 == 'user':
+            user_move(cells)
 
-        print('Making move level "easy"')
-        allowed_pos = [i for i in range(9) if cells[i] == " "]
-        random_point = random.choice(allowed_pos)
-        cells[random_point] = players_char(cells)
-        print_board(cells)
+        else:
+            AI_easy_move(cells)
 
     print(states(cells))
 
 
+def main():
+    exit_ = False
+    correct_menu = False
+
+    while not correct_menu and exit_ is False:
+        print("Input command:")
+        menu = input().split(" ")
+        
+        if menu[0] == 'exit':
+            exit_ = True
+
+        elif len(menu) != 3 and menu != 'exit':
+            print("Bad parameters!")
+
+        else:
+            if menu[0] == 'start' and menu[1] in ['user','easy'] and menu[2] in ['user','easy']:
+                player1 = menu[1]
+                player2 = menu[2]
+
+                start_game(player1, player2)
+
+            else:
+                print("Bad parameters!")
+
+
 if __name__ == "__main__":
     main()
+
