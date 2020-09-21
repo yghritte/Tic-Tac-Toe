@@ -44,8 +44,7 @@ def states(cells):
 
 def main():
     print("Enter cells:")
-    cells = list(input())
-    cells = [" " if cells[i] == "_" else cells[i] for i in range(9)]
+    cells = [" " if char == "_" else char for char in list(input())]
     print_board(cells)
 
     correct_input = False
