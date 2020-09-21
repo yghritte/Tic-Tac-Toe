@@ -17,10 +17,7 @@ def players_char(cells):
     if x == o + 1:
         return 'O'
 
-def board(cells):
-    for i in range(9):
-        if cells[i] == "_":
-            cells[i] = " "
+def print_board(cells):
     print("---------")
     print("| {} {} {} |".format(*cells[0:4]))
     print("| {} {} {} |".format(*cells[3:6]))
@@ -28,9 +25,9 @@ def board(cells):
     print("---------")
 
 def states(cells):
-    winning_positions = [cells[0:3], cells[3:6], cells[6:9],  # horizontal
+    winning_positions = [cells[0:3], cells[3:6], cells[6:9],       # horizontal
                         cells[0:7:3], cells[1:8:3], cells[2:9:3],  # vertical
-                        cells[0:9:4], cells[2:7:2]]  # diagonal
+                        cells[0:9:4], cells[2:7:2]]                # diagonal
 
     if ['O', 'O', 'O'] in winning_positions:
         return "O wins"
@@ -48,7 +45,8 @@ def states(cells):
 def main():
     print("Enter cells:")
     cells = list(input())
-    board(cells)
+    cells = [" " if cells[i] == "_" else cells[i] for i in range(9)]
+    print_board(cells)
 
     correct_input = False
     
@@ -64,6 +62,7 @@ def main():
         else:
             if coordinates[0] and coordinates[1] in ['1', '2', '3']:
                 coordinates_key = "({}, {})".format(*coordinates)
+                print(cells[coords[coordinates_key]])
                 if cells[coords[coordinates_key]] != " ":
                     print("This cell is occupied! Choose another one!")
                 else:
@@ -71,10 +70,9 @@ def main():
             else:
                 print("Coordinates should be from 1 to 3!")
                 
-    # print(cells, coords[coordinates_key])
     cells[coords[coordinates_key]] = players_char(cells)
-    board(cells)
-    # print(states(cells))
+    print_board(cells)
+    print(states(cells))
 
 if __name__ == "__main__":
     main()
