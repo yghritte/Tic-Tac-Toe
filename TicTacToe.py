@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 
 coords = {'(1, 3)' : 0, 
           '(2, 3)' : 1, 
@@ -124,8 +125,56 @@ def AI_medium_move(cells):
 
 
 def AI_hard_move(cells):
+    # allowed_pos = [i for i in range(9) if cells[i] == " "]
+    # scores_of_moves = [0 if x in allowed_pos else None for x in range(9)]
     print('Making move level "hard"')
-    pass
+    # scores = {}
+    # for cell in allowed_pos:
+    #     # print(minimax(cells, players_char(cells), True))
+    #     score = minimax(cells, players_char(cells), True)
+    #     scores[cell] = score
+
+    # print(scores)
+    best = minimax(cells, players_char(cells), True)
+    # print("BEST",best)
+    
+    cells[best[1]] = players_char(cells)
+    print_board(cells)
+
+
+def minimax(cells, player_sign, maximize):
+    
+    if player_sign == 'O':
+        enemy_sign = 'X'
+    else:
+        enemy_sign = 'O'
+    # print("PL", player_sign, "ENEMY", enemy_sign)
+    if status(cells) == "{} wins".format(player_sign):
+        return 10, None
+    elif status(cells) == "{} wins".format(enemy_sign):
+        return -10, None
+    elif status(cells) == "Draw":
+        return 0, None
+
+    allowed_pos = [i for i in range(9) if cells[i] == " "]
+    moves = []
+
+    for pos in allowed_pos:
+        new_cells = deepcopy(cells)
+        new_cells[pos] = players_char(cells)
+
+        if maximize:
+            score = minimax(new_cells, player_sign, False)
+
+        else:
+            score = minimax(new_cells, player_sign, True)
+        
+        move = (score[0], pos)
+        moves.append(move)
+
+    if maximize:
+        return max(moves)
+    return min(moves)
 
 
 def start_game(player1, player2):
